@@ -1,0 +1,87 @@
+<mat-card>
+			<mat-card-header>
+				<mat-card-title>
+					<h2>Calculate Steinhart-hart coefficients</h2>
+				</mat-card-title>
+			</mat-card-header>
+			<mat-card-content>
+        <p>
+          Calculating these coefficients for <b>your</b> NTC sensor allows you to accurately calculate the temperature when using the resistance of the NTC. 
+        </p>
+        <p><b>Why do you need Steinhart-hart coefficeints?</b><br>
+          Because a NTC does not have a linear resistance over temperatures! By taking 3 resistance measurements at 3 known temperatures, the formula will help you determine the curve for your NTC, and allows you to later convert a resistance reading of the NTC to a temperature</p>
+          <p><b>How to perform?</b><br>
+          Use a valid range for the NTC you are using (datasheet should say what range the sensor is accurate for). For each known temperature measure the <b>resistance</b> of the NTC using a multimeter. For the best results take the readings at the extremes of the range you'd like to use the sensor for, and a reading at the middle.</p>
+          <ol>
+            <li>Take your first reading athe the lowest temperature <code>T1</code> and record the resistance as <code>R<sub>t1</sub></code></li>
+            <li>Take another reading at about the middle of the range <code>T2</code> and record the resistance as <code>R<sub>t2</sub></code></li>
+            <li>Take another reading at the highest temperature <code>T3</code> and record the resistance as <code>R<sub>t3</sub></code></li>
+          </ol>
+				<form class="form-container" [formGroup]="steinhartCoefForm">
+
+					<mat-radio-group formControlName="inputUnit" (change)="calculateSteinhartCoefs()">
+						<mat-radio-button value="1">Celcius</mat-radio-button>
+						<mat-radio-button value="2">Fareignheid</mat-radio-button>
+						<mat-radio-button value="3">Kelvin</mat-radio-button>
+					</mat-radio-group>
+          <mat-hint><small>Unit in which you are measuring temperature</small></mat-hint>
+
+
+					<mat-form-field>
+						<input type="number" matInput formControlName="t1" placeholder="T1" (change)="calculateSteinhartCoefs()">
+						<mat-hint><code>T1</code> low temperature.</mat-hint>
+					</mat-form-field>
+					<mat-form-field>
+						<input type="number" matInput formControlName="t2" placeholder="T2" (change)="calculateSteinhartCoefs()">
+						<mat-hint><code>T2</code> middle temperature.</mat-hint>
+					</mat-form-field>
+					<mat-form-field>
+						<input type="number" matInput formControlName="t3" placeholder="T3" (change)="calculateSteinhartCoefs()">
+						<mat-hint><code>T2</code> high temperature.</mat-hint>
+					</mat-form-field>
+
+					<mat-form-field>
+						<input type="number" matInput formControlName="rt1" placeholder="Rt1" (change)="calculateSteinhartCoefs()">
+						<mat-hint><code>R<sub>t1</sub></code> resistance of ntc at <code>T1</code>.</mat-hint>
+					</mat-form-field>
+					<mat-form-field>
+						<input type="number" matInput formControlName="rt2" placeholder="Rt2" (change)="calculateSteinhartCoefs()">
+						<mat-hint><code>R<sub>t2</sub></code> resistance of ntc at <code>T2</code>.</mat-hint>
+					</mat-form-field>
+					<mat-form-field>
+						<input type="number" matInput formControlName="rt3" placeholder="Rt3" (change)="calculateSteinhartCoefs()">
+						<mat-hint><code>R<sub>t3</sub></code> resistance of ntc at <code>T3</code>.</mat-hint>
+					</mat-form-field>
+
+        <p>
+          Now that the measurements are knows, we can calculate the Steinhard-hard coeffiecents. Once these values are known, we can easily graph the curve of the NTC being used.
+        </p>
+
+					<mat-form-field>
+						<input type="number" matInput formControlName="a" placeholder="A" readonly>
+						<mat-hint><code>A</code> coefficient.</mat-hint>
+					</mat-form-field>
+					<mat-form-field>
+						<input type="number" matInput formControlName="b" placeholder="B" readonly>
+						<mat-hint><code>B</code> coefficient.</mat-hint>
+					</mat-form-field>
+					<mat-form-field>
+						<input type="number" matInput formControlName="c" placeholder="C" readonly>
+						<mat-hint><code>C</code> coefficient.</mat-hint>
+					</mat-form-field>
+
+				</form>
+        <div style="width:500px; height: 500px">
+        <ngx-charts-line-chart 
+          [view]="[500, 500]" 
+          [showXAxisLabel]="true"
+          [showYAxisLabel]="true"
+          [xAxis]="true"
+          [yAxis]="true"
+          xAxisLabel="Resistance"
+          yAxisLabel="Temperature"
+          [showGridLines]="true"
+          [results]="results"></ngx-charts-line-chart>
+        </div>
+			</mat-card-content>
+		</mat-card>

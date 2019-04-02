@@ -1,0 +1,62 @@
+<mat-card>
+	<mat-card-header>
+		<mat-card-title>
+			<h2>Using Steinhart-hart coefficients</h2>
+		</mat-card-title>
+	</mat-card-header>
+	<mat-card-content>
+		<p>
+			Now that you have the coeffiecients, let's revisit what we have learned:
+		</p>
+		<ol>
+			<li>Micro controllers don't directly read resistance, but rather an analog (voltage) level.</li>
+			<li>We need to configure a circuit that allows us to use the NTC in a configuration that is most effective for the temperature
+				range we would like to measure.</li>
+			<li>We need to work out the coefficients so that we can acurately apply math to work out the temperature for a given resistance.</li>
+			<li>We need to determine the NTC resistance at the given analog voltage reading.</li>
+			<li>Once we have the resistance of the NTC, we can use the coefficients to calculate the temperature.</li>
+		</ol>
+		<form class="form-container" [formGroup]="steinhartCoefForm">
+			<mat-form-field>
+        <input type="number" matInput formControlName="a" placeholder="A">
+          <mat-hint><code>A</code> coefficient.</mat-hint>
+        </mat-form-field>
+        <mat-form-field>
+          <input type="number" matInput formControlName="b" placeholder="B">
+          <mat-hint><code>B</code> coefficient.</mat-hint>
+        </mat-form-field>
+        <mat-form-field>
+          <input type="number" matInput formControlName="c" placeholder="C">
+          <mat-hint><code>C</code> coefficient.</mat-hint>
+        </mat-form-field>
+        <mat-form-field>
+          <input type="number" matInput formControlName="r2" placeholder="R2">
+          <mat-hint>R2 resistor used in the circuit</mat-hint>
+        </mat-form-field>
+        <mat-form-field>
+          <input type="number" matInput formControlName="vcc" placeholder="Vcc">
+          <mat-hint>Vcc across the circuit</mat-hint>
+        </mat-form-field>
+    </form>
+	</mat-card-content>
+</mat-card>
+
+<mat-card>
+	<mat-card-header>
+    <mat-card-title>
+      <h2>Test coefficients</h2>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+<form class="form-container" [formGroup]="steinhartCoefTestForm">
+			<mat-form-field>
+        <input type="number" matInput formControlName="rntc" placeholder="Rntc" (change)="calculateFromNtc()">
+          <mat-hint><code>Rntc</code> current value of NTC.</mat-hint>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput formControlName="temperature" placeholder="Temperature" readonly>
+          <mat-hint><code>Temperature</code> coefficient.</mat-hint>
+        </mat-form-field>
+    </form>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,118 @@
+<mat-card>
+			<mat-card-header>
+				<mat-card-title>
+					<h2>Circuit details</h2>
+				</mat-card-title>
+			</mat-card-header>
+			<mat-card-content>
+				<p>
+					First we need to determine how your circuit it put together.
+				</p>
+				<p><code>VCC</code> represents the Voltage applied across the whole of the voltage divider.</p>
+				<p><code>V<sub>a max</sub></code> represents the maximum voltage that the analog sensor can read.</p>
+				<p><code>A<sub>res</sub></code> represents the maximum voltage that the analog sensor can read.</p>
+				<p><code>V<sub>a res</sub></code> represents the voltage per resolution unit.</p>
+				<form class="form-container" [formGroup]="circuitForm">
+					<mat-form-field>
+						<input type="number" matInput formControlName="vcc" placeholder="VCC" (change)="recalculateCircuit()">
+						<mat-hint>The <code>VCC</code> applied over the whole of the voltage divider.</mat-hint>
+					</mat-form-field>
+					<mat-form-field>
+						<input type="number" matInput formControlName="va" placeholder="VA" (change)="recalculateCircuit()">
+						<mat-hint>The <code>V<sub>a max</sub></code> maximum voltage the analog can read.</mat-hint>
+					</mat-form-field>
+					<mat-form-field>
+						<input type="number" matInput formControlName="vares" placeholder="Analog Resolution" (change)="recalculateCircuit()">
+						<mat-hint>The <code>A<sub>res</sub></code> resolution of the analog input.</mat-hint>
+					</mat-form-field>
+
+					<mat-form-field>
+						<input type="number" matInput formControlName="varesv" placeholder="V / resolution" readonly>
+						<mat-hint>Voltage increase per step of the resolution</mat-hint>
+					</mat-form-field>
+				</form>
+			</mat-card-content>
+		</mat-card>
+		<br>
+		<br>
+		<mat-card>
+			<mat-card-header>
+				<mat-card-title>
+					<h2>Thermistor details</h2>
+				</mat-card-title>
+			</mat-card-header>
+			<mat-card-content>
+        <canvas #myCanvas width="500" height="100"></canvas>
+				<p>
+					Now lets determine some details of the Thermistor
+				</p>
+				<p></p>
+				<form class="form-container" [formGroup]="ntcForm">
+					<mat-form-field>
+						<input type="number" matInput formControlName="rntc" placeholder="Rntc" (change)="recalculateThermistor()">
+						<mat-hint><code>R<sub>ntc</sub></code> - "normal" resistance of the NTC (the value of the NTC you bought, 4.7k, 10k, 100k etc.</mat-hint>
+					</mat-form-field>
+          <br>
+
+          <mat-form-field>
+						<input type="number" matInput formControlName="rntcmax" placeholder="Rntc (max)" (change)="recalculateThermistor()">
+						<mat-hint><code>R<sub>ntc(max)</sub></code> - maximum resistance of the NTC for the temperature range you want to measure (at
+							its lowest temperature).</mat-hint>
+					</mat-form-field>
+          <br>
+
+					<mat-form-field>
+						<input type="number" matInput formControlName="rntcmin" placeholder="Rntc (min)" (change)="recalculateThermistor()">
+						<mat-hint><code>T<sub>ntc(min)</sub></code> - minimum resistance of the NTC for the temperature range you want to measure (at
+							it's highest temperature).</mat-hint>
+					</mat-form-field>
+					<p><br>Using these typical values of the NTC we can determine what the minimum and maximum voltages for the voltage divider
+						circuit would have been using a resistor of the same value for the normal NTC resistance.</p>
+					<mat-form-field>
+						<input type="number" matInput formControlName="vntcmaxa" placeholder="Vntc(max)a" readonly>
+						<mat-hint>Maximum voltage at the NTC</mat-hint>
+					</mat-form-field>
+					<mat-form-field>
+						<input type="number" matInput formControlName="vntcmina" placeholder="Vntc(min)a" readonly>
+						<mat-hint>Minimim votage at the NTC</mat-hint>
+					</mat-form-field>
+					<p><br>Let's determine the best reference resistor we can use to have the highest voltage as close to <code>V<sub>a max</sub></code> as posible.</p>
+					<mat-form-field>
+						<input type="number" matInput formControlName="r2_best" placeholder="R2 best" readonly>
+						<mat-hint>Ideal resistance for R2</mat-hint>
+					</mat-form-field>
+					<mat-form-field>
+						<input type="number" matInput formControlName="r2_used" placeholder="R2 Used" (change)="recalculateVNtcRange()">
+						<mat-hint>The resistor closest you could find that you would like to use</mat-hint>
+					</mat-form-field>
+
+
+					<p><br>Using the provided value for <code>R<sub>2</sub></code> we can now determine the new limits for the range of readings</p>
+					<mat-form-field>
+						<input type="number" matInput formControlName="vntcmax" placeholder="Vntc(max)" readonly>
+						<mat-hint>The maximum voltage at the NTC (at the highest temperature)</mat-hint>
+					</mat-form-field>
+					<mat-form-field>
+						<input type="number" matInput formControlName="vntcmin" placeholder="Vntc(min)" readonly>
+						<mat-hint>The minimum voltage at the NTC (at the lowest temperature)</mat-hint>
+					</mat-form-field>
+
+					<p><br>Using the now known voltage range on the analog input, we can now determine the range of the analog that we are
+						going to use</p>
+					<mat-form-field>
+						<input type="number" matInput formControlName="amax" placeholder="Analog max" readonly>
+						<mat-hint>The maximum analog reading (at the highest temperature)</mat-hint>
+					</mat-form-field>
+					<mat-form-field>
+						<input type="number" matInput formControlName="amin" placeholder="Analog min" readonly>
+						<mat-hint>The minimum analog reading (at the lowest temperature)</mat-hint>
+					</mat-form-field>
+					<mat-form-field>
+						<input type="number" matInput formControlName="arange" placeholder="Analog range" readonly>
+						<mat-hint>The number of steps we are using in the analog range</mat-hint>
+					</mat-form-field>
+
+				</form>
+
+			</mat-card-content>
+		</mat-card>

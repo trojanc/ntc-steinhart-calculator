@@ -1,0 +1,29 @@
+/* Add application styles & imports to this file! */
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+body{
+  background-color: #efefef;
+}
+mat-tab{
+  padding: 2rem;
+}
+
+mat-card {
+  max-width: 600px;
+}
+.form-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+}
+
+.form-container > * {
+  width: 100%;
+}
+.form-container > mat-form-field,
+.form-container > mat-radio-button {
+  margin-top: 1rem;
+}
+
+mat-radio-button {
+  margin-right: 1rem
+}
